@@ -12,6 +12,10 @@ def batch_rename_files():
     style = ttk.Style()
     style.theme_use('clam')
 
+    # Create styles for normal and underlined radiobuttons
+    style.configure("TRadiobutton", font=("TkDefaultFont", 10))
+    style.configure("Underline.TRadiobutton", font=("TkDefaultFont", 10, "underline"))
+
     main_frame = ttk.Frame(window, padding="10")
     main_frame.pack(fill=tk.BOTH, expand=True)
 
@@ -83,6 +87,67 @@ def batch_rename_files():
         error_label.pack(pady=(0, 10))
         window.after(3000, lambda: error_label.pack_forget())
 
+    def update_ui():
+        option = option_var.get()
+        if option == "2":
+            prefix_suffix_var.set("0")
+            prefix_suffix_radio0.state(['!disabled', 'selected'])
+            prefix_suffix_radio1.state(['disabled'])
+            prefix_suffix_radio2.state(['disabled'])
+            prefix_suffix_radio3.state(['disabled'])
+            prefix_entry.state(['disabled'])
+            suffix_entry.state(['disabled'])
+            swap_from_entry.state(['!disabled'])
+            swap_to_entry.state(['!disabled'])
+            option_radio2.configure(style="Underline.TRadiobutton")
+            prefix_suffix_radio0.configure(style="Underline.TRadiobutton")
+            option_radio1.configure(style="TRadiobutton")
+            prefix_suffix_radio1.configure(style="TRadiobutton")
+            prefix_suffix_radio2.configure(style="TRadiobutton")
+            prefix_suffix_radio3.configure(style="TRadiobutton")
+        else:
+            prefix_suffix_radio0.state(['!disabled'])
+            prefix_suffix_radio1.state(['!disabled'])
+            prefix_suffix_radio2.state(['!disabled'])
+            prefix_suffix_radio3.state(['!disabled'])
+            swap_from_entry.state(['disabled'])
+            swap_to_entry.state(['disabled'])
+            option_radio1.configure(style="Underline.TRadiobutton")
+            option_radio2.configure(style="TRadiobutton")
+            prefix_suffix_radio0.configure(style="TRadiobutton")
+            update_prefix_suffix_ui()
+
+    def update_prefix_suffix_ui():
+        prefix_suffix_option = prefix_suffix_var.get()
+        if prefix_suffix_option == "0":
+            prefix_entry.state(['disabled'])
+            suffix_entry.state(['disabled'])
+            prefix_suffix_radio0.configure(style="Underline.TRadiobutton")
+            prefix_suffix_radio1.configure(style="TRadiobutton")
+            prefix_suffix_radio2.configure(style="TRadiobutton")
+            prefix_suffix_radio3.configure(style="TRadiobutton")
+        elif prefix_suffix_option == "1":
+            prefix_entry.state(['!disabled'])
+            suffix_entry.state(['disabled'])
+            prefix_suffix_radio0.configure(style="TRadiobutton")
+            prefix_suffix_radio1.configure(style="Underline.TRadiobutton")
+            prefix_suffix_radio2.configure(style="TRadiobutton")
+            prefix_suffix_radio3.configure(style="TRadiobutton")
+        elif prefix_suffix_option == "2":
+            prefix_entry.state(['disabled'])
+            suffix_entry.state(['!disabled'])
+            prefix_suffix_radio0.configure(style="TRadiobutton")
+            prefix_suffix_radio1.configure(style="TRadiobutton")
+            prefix_suffix_radio2.configure(style="Underline.TRadiobutton")
+            prefix_suffix_radio3.configure(style="TRadiobutton")
+        elif prefix_suffix_option == "3":
+            prefix_entry.state(['!disabled'])
+            suffix_entry.state(['!disabled'])
+            prefix_suffix_radio0.configure(style="TRadiobutton")
+            prefix_suffix_radio1.configure(style="TRadiobutton")
+            prefix_suffix_radio2.configure(style="TRadiobutton")
+            prefix_suffix_radio3.configure(style="Underline.TRadiobutton")
+
     folder_frame = ttk.Frame(main_frame)
     folder_frame.pack(fill=tk.X, pady=5)
 
@@ -102,9 +167,9 @@ def batch_rename_files():
     option_label.pack(side=tk.LEFT, padx=(0, 5))
 
     option_var = tk.StringVar(value="1")
-    option_radio1 = ttk.Radiobutton(option_frame, text="Add prefix and/or suffix", variable=option_var, value="1")
+    option_radio1 = ttk.Radiobutton(option_frame, text="Add prefix and/or suffix", variable=option_var, value="1", command=update_ui, style="TRadiobutton")
     option_radio1.pack(side=tk.LEFT, padx=(0, 10))
-    option_radio2 = ttk.Radiobutton(option_frame, text="Swap characters", variable=option_var, value="2")
+    option_radio2 = ttk.Radiobutton(option_frame, text="Swap characters", variable=option_var, value="2", command=update_ui, style="TRadiobutton")
     option_radio2.pack(side=tk.LEFT)
 
     prefix_suffix_frame = ttk.Frame(main_frame)
@@ -114,13 +179,13 @@ def batch_rename_files():
     prefix_suffix_label.pack(side=tk.LEFT, padx=(0, 5))
 
     prefix_suffix_var = tk.StringVar(value="0")
-    prefix_suffix_radio0 = ttk.Radiobutton(prefix_suffix_frame, text="None", variable=prefix_suffix_var, value="0")
+    prefix_suffix_radio0 = ttk.Radiobutton(prefix_suffix_frame, text="None", variable=prefix_suffix_var, value="0", command=update_prefix_suffix_ui, style="TRadiobutton")
     prefix_suffix_radio0.pack(side=tk.LEFT, padx=(0, 5))
-    prefix_suffix_radio1 = ttk.Radiobutton(prefix_suffix_frame, text="Add prefix", variable=prefix_suffix_var, value="1")
+    prefix_suffix_radio1 = ttk.Radiobutton(prefix_suffix_frame, text="Add prefix", variable=prefix_suffix_var, value="1", command=update_prefix_suffix_ui, style="TRadiobutton")
     prefix_suffix_radio1.pack(side=tk.LEFT, padx=(0, 5))
-    prefix_suffix_radio2 = ttk.Radiobutton(prefix_suffix_frame, text="Add suffix", variable=prefix_suffix_var, value="2")
+    prefix_suffix_radio2 = ttk.Radiobutton(prefix_suffix_frame, text="Add suffix", variable=prefix_suffix_var, value="2", command=update_prefix_suffix_ui, style="TRadiobutton")
     prefix_suffix_radio2.pack(side=tk.LEFT, padx=(0, 5))
-    prefix_suffix_radio3 = ttk.Radiobutton(prefix_suffix_frame, text="Add both", variable=prefix_suffix_var, value="3")
+    prefix_suffix_radio3 = ttk.Radiobutton(prefix_suffix_frame, text="Add both", variable=prefix_suffix_var, value="3", command=update_prefix_suffix_ui, style="TRadiobutton")
     prefix_suffix_radio3.pack(side=tk.LEFT)
 
     prefix_suffix_entry_frame = ttk.Frame(main_frame)
@@ -157,6 +222,9 @@ def batch_rename_files():
     # Footer
     footer_label = ttk.Label(main_frame, text="made with love in Singapore, Adib Zailan, 2024", font=("Arial", 8, "italic"))
     footer_label.pack(side=tk.BOTTOM, pady=(10, 0))
+
+    # Initialize UI
+    update_ui()
 
     window.mainloop()
 
