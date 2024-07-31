@@ -16,6 +16,12 @@ def batch_rename_files():
     style.configure("TRadiobutton", font=("TkDefaultFont", 10))
     style.configure("Underline.TRadiobutton", font=("TkDefaultFont", 10, "underline"))
 
+    # Create a style for disabled Entry widgets
+    style.map("TEntry",
+        fieldbackground=[("disabled", "light gray"), ("!disabled", "white")],
+        foreground=[("disabled", "gray"), ("!disabled", "black")]
+    )
+
     main_frame = ttk.Frame(window, padding="10")
     main_frame.pack(fill=tk.BOTH, expand=True)
 
@@ -76,11 +82,11 @@ def batch_rename_files():
         threading.Thread(target=reset_button).start()
 
     def update_button(text):
-        rename_button.config(text=text, bg='yellow')
+        rename_button.config(text=text, bg='#FF6F61')  # Updated color as requested
 
     def reset_button():
         time.sleep(2)  # Wait for 2 seconds
-        rename_button.config(text="Rename Files", bg='SystemButtonFace')
+        rename_button.config(text="Rename files", bg='SystemButtonFace')  # Updated text case
 
     def show_error(message):
         error_label.config(text=message)
@@ -216,11 +222,11 @@ def batch_rename_files():
 
     error_label = ttk.Label(main_frame, foreground="red")
 
-    rename_button = tk.Button(main_frame, text="Rename Files", command=rename_files)
+    rename_button = tk.Button(main_frame, text="Rename files", command=rename_files)  # Updated text case
     rename_button.pack(pady=10)
 
     # Footer
-    footer_label = ttk.Label(main_frame, text="made with love in Singapore, Adib Zailan, 2024", font=("Arial", 8, "italic"))
+    footer_label = ttk.Label(main_frame, text="Beta v0.1 / Made with love in Singapore, Adib Zailan, 2024", font=("Arial", 8, "italic"))
     footer_label.pack(side=tk.BOTTOM, pady=(10, 0))
 
     # Initialize UI
