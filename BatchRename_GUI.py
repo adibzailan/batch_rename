@@ -82,11 +82,11 @@ def batch_rename_files():
         threading.Thread(target=reset_button).start()
 
     def update_button(text):
-        rename_button.config(text=text, bg='#FF6F61')  # Updated color as requested
+        rename_button.config(text=text, bg='#FF6F61')
 
     def reset_button():
         time.sleep(2)  # Wait for 2 seconds
-        rename_button.config(text="Rename files", bg='SystemButtonFace')  # Updated text case
+        rename_button.config(text="Rename files", bg='SystemButtonFace')
 
     def show_error(message):
         error_label.config(text=message)
@@ -96,8 +96,7 @@ def batch_rename_files():
     def update_ui():
         option = option_var.get()
         if option == "2":
-            prefix_suffix_var.set("0")
-            prefix_suffix_radio0.state(['!disabled', 'selected'])
+            prefix_suffix_var.set("1")  # Set to "Add prefix" as default
             prefix_suffix_radio1.state(['disabled'])
             prefix_suffix_radio2.state(['disabled'])
             prefix_suffix_radio3.state(['disabled'])
@@ -106,13 +105,11 @@ def batch_rename_files():
             swap_from_entry.state(['!disabled'])
             swap_to_entry.state(['!disabled'])
             option_radio2.configure(style="Underline.TRadiobutton")
-            prefix_suffix_radio0.configure(style="Underline.TRadiobutton")
             option_radio1.configure(style="TRadiobutton")
             prefix_suffix_radio1.configure(style="TRadiobutton")
             prefix_suffix_radio2.configure(style="TRadiobutton")
             prefix_suffix_radio3.configure(style="TRadiobutton")
         else:
-            prefix_suffix_radio0.state(['!disabled'])
             prefix_suffix_radio1.state(['!disabled'])
             prefix_suffix_radio2.state(['!disabled'])
             prefix_suffix_radio3.state(['!disabled'])
@@ -120,36 +117,25 @@ def batch_rename_files():
             swap_to_entry.state(['disabled'])
             option_radio1.configure(style="Underline.TRadiobutton")
             option_radio2.configure(style="TRadiobutton")
-            prefix_suffix_radio0.configure(style="TRadiobutton")
             update_prefix_suffix_ui()
 
     def update_prefix_suffix_ui():
         prefix_suffix_option = prefix_suffix_var.get()
-        if prefix_suffix_option == "0":
-            prefix_entry.state(['disabled'])
-            suffix_entry.state(['disabled'])
-            prefix_suffix_radio0.configure(style="Underline.TRadiobutton")
-            prefix_suffix_radio1.configure(style="TRadiobutton")
-            prefix_suffix_radio2.configure(style="TRadiobutton")
-            prefix_suffix_radio3.configure(style="TRadiobutton")
-        elif prefix_suffix_option == "1":
+        if prefix_suffix_option == "1":
             prefix_entry.state(['!disabled'])
             suffix_entry.state(['disabled'])
-            prefix_suffix_radio0.configure(style="TRadiobutton")
             prefix_suffix_radio1.configure(style="Underline.TRadiobutton")
             prefix_suffix_radio2.configure(style="TRadiobutton")
             prefix_suffix_radio3.configure(style="TRadiobutton")
         elif prefix_suffix_option == "2":
             prefix_entry.state(['disabled'])
             suffix_entry.state(['!disabled'])
-            prefix_suffix_radio0.configure(style="TRadiobutton")
             prefix_suffix_radio1.configure(style="TRadiobutton")
             prefix_suffix_radio2.configure(style="Underline.TRadiobutton")
             prefix_suffix_radio3.configure(style="TRadiobutton")
         elif prefix_suffix_option == "3":
             prefix_entry.state(['!disabled'])
             suffix_entry.state(['!disabled'])
-            prefix_suffix_radio0.configure(style="TRadiobutton")
             prefix_suffix_radio1.configure(style="TRadiobutton")
             prefix_suffix_radio2.configure(style="TRadiobutton")
             prefix_suffix_radio3.configure(style="Underline.TRadiobutton")
@@ -184,9 +170,7 @@ def batch_rename_files():
     prefix_suffix_label = ttk.Label(prefix_suffix_frame, text="Select Prefix/Suffix Option:")
     prefix_suffix_label.pack(side=tk.LEFT, padx=(0, 5))
 
-    prefix_suffix_var = tk.StringVar(value="0")
-    prefix_suffix_radio0 = ttk.Radiobutton(prefix_suffix_frame, text="None", variable=prefix_suffix_var, value="0", command=update_prefix_suffix_ui, style="TRadiobutton")
-    prefix_suffix_radio0.pack(side=tk.LEFT, padx=(0, 5))
+    prefix_suffix_var = tk.StringVar(value="1")  # Set "Add prefix" as default
     prefix_suffix_radio1 = ttk.Radiobutton(prefix_suffix_frame, text="Add prefix", variable=prefix_suffix_var, value="1", command=update_prefix_suffix_ui, style="TRadiobutton")
     prefix_suffix_radio1.pack(side=tk.LEFT, padx=(0, 5))
     prefix_suffix_radio2 = ttk.Radiobutton(prefix_suffix_frame, text="Add suffix", variable=prefix_suffix_var, value="2", command=update_prefix_suffix_ui, style="TRadiobutton")
@@ -222,7 +206,7 @@ def batch_rename_files():
 
     error_label = ttk.Label(main_frame, foreground="red")
 
-    rename_button = tk.Button(main_frame, text="Rename files", command=rename_files)  # Updated text case
+    rename_button = tk.Button(main_frame, text="Rename files", command=rename_files)
     rename_button.pack(pady=10)
 
     # Footer
