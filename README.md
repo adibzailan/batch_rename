@@ -28,7 +28,7 @@ The Batch File Renaming Tool is a user-friendly desktop application that allows 
 
 1. Run the script by executing:
    ```
-   python BatchRename_GUI-v4.py
+   python BatchRename.py
    ```
 2. The Batch File Renaming Tool window will appear.
 
