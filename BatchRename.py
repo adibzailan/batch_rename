@@ -1,4 +1,4 @@
-# made with love in Singapore; 2024; Adib Zailan
+# made with love in Singapore, Adib Zailan, 2024
 
 import os
 
