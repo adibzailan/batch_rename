@@ -9,7 +9,7 @@ def batch_rename_files():
     window.title("Batch Rename Files")
 
     # Introduction label
-    intro_label = tk.Label(window, text="# made with love in Singapore; 2024; Adib Zailan")
+    intro_label = tk.Label(window, text="made with love in Singapore, Adib Zailan, 2024")
     intro_label.pack(pady=10)
 
     # Function to select folder
