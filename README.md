@@ -81,7 +81,7 @@ Contributions to the Batch File Renaming Tool are welcome! Please feel free to s
 
 ## License
 
-[Specify your chosen license here]
+This project is licensed under the MIT License.
 
 ## Acknowledgments
 
