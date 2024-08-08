@@ -60,7 +60,7 @@ The tool provides error messages in the following situations:
 
 ## Development
 
-This tool is developed using Python and the tkinter library for the graphical user interface. The main script is `BatchRename_GUI.py`.
+This tool is developed using Python and the tkinter library for the graphical user interface. The main script is `BatchRename.py`.
 
 ### Branding
 
