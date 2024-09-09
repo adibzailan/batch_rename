@@ -1,97 +1,130 @@
 # Batch File Renaming Tool
 
-## Overview
-
-The Batch File Renaming Tool is a user-friendly desktop application that allows you to rename multiple files in a folder quickly and easily. It provides options to add prefixes, suffixes, or both to file names, as well as the ability to swap characters within file names.
+The Batch File Renaming Tool is a user-friendly application that allows you to rename multiple files in a folder quickly and easily. It provides a graphical user interface for easy configuration and execution of batch file renaming operations.
 
 ## Features
 
-- Simple and intuitive graphical user interface
+- Select source folder through a graphical interface
 - Two main renaming options:
   1. Add prefix and/or suffix
-  2. Swap characters
-- Ability to select a folder for batch renaming
+  2. Swap characters in file names
 - Real-time preview of file name changes
+- Select specific files for renaming or apply to all files in the folder
 - Undo functionality to revert changes
-- Error handling and user feedback
+- Dark mode interface for comfortable usage
 - Studio Merpati branding elements
+
+## Requirements
+
+- Python 3.6 or higher
+- PyQt6
 
 ## Installation
 
-1. Ensure you have Python 3.x installed on your system.
-2. Clone this repository or download the source code.
-3. Install the required dependencies (if any) by running:
-   ```
-   pip install -r requirements.txt
-   ```
+1. Clone this repository or download the source code.
+
+2. Install the required dependencies:
+
+```
+pip install -r requirements.txt
+```
 
 ## Usage
 
-1. Run the script by executing:
-   ```
-   python main.py
-   ```
-2. The Batch File Renaming Tool window will appear.
+To run the Batch File Renaming Tool, execute the following command in the project directory:
 
-### Renaming Files
+```
+python ui_main.py
+```
 
-1. Click the "Browse" button to select the folder containing the files you want to rename.
-2. Choose a renaming option:
-   - "Add prefix and/or suffix"
-   - "Swap characters"
+This will launch the graphical user interface. From here, you can:
 
-3. If you selected "Add prefix and/or suffix":
-   - Choose whether to add a prefix, suffix, or both.
-   - Enter the desired prefix and/or suffix in the provided input boxes.
+1. Select the source folder by clicking the "Browse" button
+2. Choose a renaming option: "Add prefix and/or suffix" or "Swap characters"
+3. Enter the necessary information for the chosen renaming option
+4. Select the files you want to rename
+5. Preview the changes in the preview list
+6. Click "Rename Files" to execute the renaming operation
+7. Use "Undo Rename" if you need to revert the changes
 
-4. If you selected "Swap characters":
-   - Enter the text you want to replace in the "Swap from" box.
-   - Enter the replacement text in the "Swap to" box.
+## Packaging the Application
 
-5. Use the file list to select which files you want to rename. You can use the "Select All" and "Select None" buttons for convenience.
+To create a standalone executable that can be run on systems without Python installed, you can use PyInstaller. There are two methods to package the application:
 
-6. The preview list will show you how the selected files will be renamed.
+### Method 1: Using the PyInstaller script
 
-7. Click the "Rename Files" button to start the renaming process.
+Run the following command:
 
-8. A success message will appear briefly on the button when the process is complete.
+```
+python pyinstaller_script.py
+```
 
-9. If you need to undo the renaming, click the "Undo Rename" button.
+### Method 2: Running PyInstaller directly
 
-## Error Handling
+Run the following command:
 
-The tool provides error messages in the following situations:
-- No folder is selected
-- No files are selected for renaming
-- An error occurs during the renaming process
+```
+pyinstaller --onefile --windowed ui_main.py
+```
 
-## Development
+Both methods will create an executable file in the `dist` folder. You can distribute this executable to run the application on other systems without requiring Python or the dependencies to be installed.
 
-This tool is developed using Python and the tkinter library for the graphical user interface. The project is structured as follows:
+## File Structure
 
-- `main.py`: The entry point of the application
-- `batch_rename_ui.py`: Contains the `BatchRenameUI` class, which handles the user interface and main logic
-- `file_operations.py`: Contains the `FileOperations` class, which handles file system operations
+The project is organized into two main components: the frontend (ui) and the backend (core).
 
-### Branding
+- `ui_main.py`: The main entry point of the application
+- `ui/`: Frontend (UI) components
+  - `main_window.py`: Contains the main BatchRenameUI class
+  - `rename_worker.py`: Contains the RenameWorker class for background processing
+  - `ui_components/`: Individual UI components
+    - `folder_selection.py`: FolderSelectionWidget
+    - `file_list.py`: FileListWidget
+    - `rename_options.py`: RenameOptionsWidget
+    - `action_buttons.py`: ActionButtonsWidget
+    - `progress_bar.py`: ProgressBarWidget
+    - `footer.py`: FooterWidget
+  - `utils/`
+    - `theme.py`: Contains theme-related functions
+- `core/`: Backend (logic) components
+  - `file_operations.py`: File-related operations
+  - `rename_logic.py`: Core renaming logic
+  - `rename_functions.py`: Specific renaming functions
+- `pyinstaller_script.py`: Script for packaging the application with PyInstaller
 
-The tool incorporates elements of Studio Merpati branding:
-- The success message button color (#FF6F61) is inspired by Studio Merpati's color palette, adding a personal touch to the user interface.
-- A footer with branding information is included in the main window.
+### Frontend (UI) vs Backend (Core)
 
-### Future Improvements
+- **Frontend (ui)**: This directory contains all the user interface components. It handles the presentation layer, user interactions, and coordinates with the backend to perform operations. The frontend is responsible for displaying information to the user and capturing user input.
 
-- Add support for renaming based on file attributes (e.g., creation date, file type)
-- Implement file name pattern matching and regular expressions for more advanced renaming options
-- Create an executable version for easy distribution
-- Add support for multiple languages
-- Implement a dark mode option
-- Add the ability to save and load renaming presets
+- **Backend (core)**: This directory contains the core logic and functionality of the application. It handles file operations, renaming logic, and other backend processes. The backend doesn't deal with user interfaces directly but provides the necessary functions and classes that the frontend uses to perform operations.
 
-## Contributing
+This separation of concerns between frontend and backend allows for better organization, maintainability, and potential reusability of code. The frontend can be updated or replaced without affecting the core functionality, and vice versa.
 
-Contributions to improve the Batch File Renaming Tool are welcome. Please feel free to submit pull requests or open issues to suggest improvements or report bugs.
+## How It Works
+
+1. **User Interface**: The GUI provides an easy way to select the source folder, choose renaming options, and select files for renaming.
+
+2. **Rename Options**: Users can choose to add prefixes/suffixes or swap characters in file names.
+
+3. **Preview**: The application shows a real-time preview of the renamed files before applying changes.
+
+4. **Renaming Process**: When the user clicks "Rename Files," the application renames the selected files according to the chosen options.
+
+5. **Undo Functionality**: The "Undo Rename" feature allows users to revert the last renaming operation.
+
+## Troubleshooting
+
+If you encounter any issues:
+
+1. Ensure that you have the correct permissions to read from and write to the source folder.
+2. Check for any error messages displayed by the application.
+3. Make sure that all required dependencies are installed correctly.
+4. If the application doesn't start, try running it from the command line to see any error messages that might not be visible otherwise.
 
 ## License
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+This project is open-source and available under the MIT License.
+
+## Contributing
+
+Contributions to the Batch File Renaming Tool project are welcome! Please feel free to submit pull requests, create issues or spread the word.
