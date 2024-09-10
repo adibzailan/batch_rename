@@ -16,20 +16,17 @@ The Batch File Renaming Tool is a user-friendly application that allows you to r
 - Splash screen for a polished startup experience
 - Detailed logging for better diagnostics and troubleshooting
 
-## Latest Updates (v1.3.0)
-
-- Improved error handling and logging throughout the application
-- Enhanced file listing and renaming functionality
-- Updated UI components for better user interaction
-- Integrated Cerebri Sans font for improved typography
-- Further optimized startup process and main window display
-
-## Recent Improvements (v1.2.0)
+## Latest Updates (v1.2.0)
 
 - Implemented a stylish splash screen adhering to Studio Merpati Design System
 - Improved startup experience with a loading progress bar
 - Enhanced error handling during application initialization
 - Centered the main application window on the screen for better user experience
+- Improved error handling and logging throughout the application
+- Enhanced file listing and renaming functionality
+- Updated UI components for better user interaction
+- Integrated Cerebri Sans font for improved typography
+- Further optimized startup process and main window display
 
 ## Previous Improvements (v1.1.0)
 
