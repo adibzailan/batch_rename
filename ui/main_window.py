@@ -46,7 +46,6 @@ class BatchRenameUI(QMainWindow):
         )
         
     def setup_ui(self):
-        # Placeholder for setup_ui method
         self.folder_selection = FolderSelectionWidget(self)
         self.file_list = FileListWidget(self)
         self.rename_options = RenameOptionsWidget(self)
@@ -62,41 +61,121 @@ class BatchRenameUI(QMainWindow):
         self.layout.addWidget(self.progress_bar, 4, 0)
         self.layout.addWidget(self.footer, 5, 0)
 
+        # Connect signals
+        self.folder_selection.folder_selected.connect(self.update_file_list)
+        self.action_buttons.rename_button.clicked.connect(self.batch_rename_files)
+        self.action_buttons.undo_button.clicked.connect(self.undo_rename)
+        self.file_list.file_list.itemSelectionChanged.connect(self.update_preview)
+        self.rename_options.options_changed.connect(self.update_preview)
+
     def update_file_list(self, folder_path=None):
-        # Placeholder for update_file_list method
-        pass
+        if folder_path is None:
+            folder_path = self.folder_selection.get_folder_path()
+        if folder_path and os.path.isdir(folder_path):
+            try:
+                files = FileOperations.get_files_in_folder(folder_path)
+                self.file_list.clear_and_add_files(files)
+                self.update_preview()
+            except PermissionError:
+                logging.error(f"Permission denied when accessing folder: {folder_path}")
+                self.show_error(f"Permission denied when accessing folder: {folder_path}")
+            except Exception as e:
+                logging.error(f"Error updating file list: {str(e)}")
+                self.show_error(f"An error occurred while updating the file list: {str(e)}")
+        else:
+            logging.warning(f"Invalid folder path: {folder_path}")
+            self.show_error("Please select a valid folder.")
 
     def update_preview(self):
-        # Placeholder for update_preview method
-        pass
+        self.file_list.clear_preview()
+        selected_items = self.file_list.get_selected_items()
+        for item in selected_items:
+            filename = item.text()
+            new_filename = self.apply_rename_operation(filename)
+            if new_filename != filename:
+                self.file_list.add_preview_item(f"{filename} → {new_filename}")
+            else:
+                self.file_list.add_preview_item(f"{filename} (no change)")
 
     def apply_rename_operation(self, filename):
-        # Placeholder for apply_rename_operation method
-        return filename
+        operation, param1, param2 = self.rename_options.get_rename_operation()
+        if operation == "prefix_suffix":
+            name, ext = os.path.splitext(filename)
+            return f"{param1}{name}{param2}{ext}"
+        else:
+            return filename.replace(param1, param2)
 
     def batch_rename_files(self):
-        # Placeholder for batch_rename_files method
-        pass
+        folder_path = self.folder_selection.get_folder_path()
+        if not folder_path or not os.path.isdir(folder_path):
+            logging.warning(f"Invalid folder path: {folder_path}")
+            self.show_error("Please select a valid folder.")
+            return
+        
+        selected_items = self.file_list.get_selected_items()
+        if not selected_items:
+            logging.warning("No files selected for renaming")
+            self.show_error("Please select at least one file.")
+            return
+        
+        self.original_names = [item.text() for item in selected_items]
+        self.progress_bar.set_maximum(len(self.original_names))
+        self.progress_bar.set_value(0)
+        
+        self.rename_worker = RenameWorker(folder_path, self.original_names, self.apply_rename_operation)
+        self.rename_worker.progress.connect(self.update_progress)
+        self.rename_worker.finished.connect(self.rename_finished)
+        self.rename_worker.error.connect(self.show_error)
+        self.rename_worker.start()
+        
+        self.action_buttons.enable_rename_button(False)
+        self.action_buttons.enable_undo_button(False)
 
     def update_progress(self, value):
-        # Placeholder for update_progress method
-        pass
+        self.progress_bar.set_value(value)
 
     def rename_finished(self):
-        # Placeholder for rename_finished method
-        pass
+        self.action_buttons.enable_rename_button(True)
+        self.action_buttons.enable_undo_button(True)
+        self.update_file_list()
+        logging.info("Files renamed successfully")
+        QMessageBox.information(self, "Success", "Files renamed successfully!")
 
     def show_error(self, error_message):
-        # Placeholder for show_error method
-        pass
-
-    def report_error(self):
-        # Placeholder for report_error method
-        pass
+        logging.error(f"Error: {error_message}")
+        QMessageBox.critical(self, "Error", error_message)
+        self.action_buttons.enable_rename_button(True)
 
     def undo_rename(self):
-        # Placeholder for undo_rename method
-        pass
+        folder_path = self.folder_selection.get_folder_path()
+        if not folder_path or not os.path.isdir(folder_path):
+            logging.warning(f"Invalid folder path for undo operation: {folder_path}")
+            self.show_error("Please select a valid folder.")
+            return
+        
+        try:
+            current_files = os.listdir(folder_path)
+        except PermissionError:
+            logging.error(f"Permission denied when accessing folder for undo: {folder_path}")
+            self.show_error(f"Permission denied when accessing folder: {folder_path}")
+            return
+        except Exception as e:
+            logging.error(f"Error listing files for undo: {str(e)}")
+            self.show_error(f"An error occurred while listing files: {str(e)}")
+            return
+        
+        for original, current in zip(self.original_names, current_files):
+            if original != current:
+                try:
+                    FileOperations.rename_file(folder_path, current, original)
+                except Exception as e:
+                    logging.error(f"Error reverting {current} to {original}: {str(e)}")
+                    self.show_error(f"Error reverting {current} to {original}: {str(e)}")
+        
+        self.action_buttons.enable_undo_button(False)
+        self.update_file_list()
+        logging.info("Undo operation completed")
+        QMessageBox.information(self, "Undo Complete", "Files have been reverted to their original names.")
 
     def closeEvent(self, event):
         try:

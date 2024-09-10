@@ -14,15 +14,24 @@ The Batch File Renaming Tool is a user-friendly application that allows you to r
 - Modern, Swiss Design-inspired color scheme for improved readability and aesthetics
 - Error reporting for easier troubleshooting
 - Splash screen for a polished startup experience
+- Detailed logging for better diagnostics and troubleshooting
 
-## Latest Updates (v1.2.0)
+## Latest Updates (v1.3.0)
+
+- Improved error handling and logging throughout the application
+- Enhanced file listing and renaming functionality
+- Updated UI components for better user interaction
+- Integrated Cerebri Sans font for improved typography
+- Further optimized startup process and main window display
+
+## Recent Improvements (v1.2.0)
 
 - Implemented a stylish splash screen adhering to Studio Merpati Design System
 - Improved startup experience with a loading progress bar
 - Enhanced error handling during application initialization
 - Centered the main application window on the screen for better user experience
 
-## Recent Improvements (v1.1.0)
+## Previous Improvements (v1.1.0)
 
 - Redesigned UI adhering to Swiss Design principles and Studio Merpati brand guidelines
 - Implemented an asymmetrical layout with controls on the left (30%) and content on the right (70%)
@@ -31,10 +40,10 @@ The Batch File Renaming Tool is a user-friendly application that allows you to r
   - Dark Gray (#333333) for text
   - Off-White (#F5F5F5) for backgrounds
   - Soft Teal (#4ECDC4) for selected items and links
-- Updated typography to use Helvetica Neue and Open Sans fonts
+- Updated typography to use Cerebri Sans font
 - Improved white space usage for better visual separation and clarity
 - Enhanced responsive design with a splitter for flexible resizing
-- Updated footer with new layout and version number (Alpha 1.2.0)
+- Updated footer with new layout and version number (Alpha 1.3.0)
 - Streamlined the overall user experience with a cleaner, more minimalist layout
 
 ## Requirements
@@ -62,13 +71,14 @@ python ui_main.py
 
 This will launch the application with a splash screen, followed by the main graphical user interface. From here, you can:
 
-1. Select the source folder by clicking the "Browse" button
-2. Use CTRL+Click and Shift+Click to select multiple files in the file list
-3. Choose a renaming option: "Add prefix and/or suffix" or "Swap characters"
-4. Enter the necessary information for the chosen renaming option
-5. Preview the changes in real-time in the preview list
-6. Click "Rename Files" to execute the renaming operation
-7. Use "Undo Rename" if you need to revert the changes
+1. Wait for the splash screen to complete its initialization process
+2. Select the source folder by clicking the "Browse" button
+3. Use CTRL+Click and Shift+Click to select multiple files in the file list
+4. Choose a renaming option: "Add prefix and/or suffix" or "Swap characters"
+5. Enter the necessary information for the chosen renaming option
+6. Preview the changes in real-time in the preview list
+7. Click "Rename Files" to execute the renaming operation
+8. Use "Undo Rename" if you need to revert the changes
 
 ## Packaging the Application
 
@@ -116,7 +126,7 @@ The project is organized into two main components: the frontend (ui) and the bac
   - `rename_functions.py`: Specific renaming functions
 - `pyinstaller_script.py`: Script for packaging the application with PyInstaller
 - `resources/`: Contains application resources
-  - `fonts/`: Custom fonts used in the application
+  - `fonts/`: Custom fonts used in the application (including Cerebri Sans)
   - `images/`: Images used in the application, including the splash screen logo
 
 ### Frontend (UI) vs Backend (Core)
