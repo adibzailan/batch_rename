@@ -3,7 +3,7 @@ import os
 import logging
 import tempfile
 import shutil
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QMessageBox, QFileDialog, QSplitter
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QMessageBox, QFileDialog, QSplitter, QGridLayout
 from PyQt6.QtCore import Qt
 from .rename_worker import RenameWorker
 from .ui_components.folder_selection import FolderSelectionWidget
@@ -25,11 +25,11 @@ class BatchRenameUI(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Batch Rename Files")
-        self.setGeometry(100, 100, 1000, 600)
+        self.setGeometry(100, 100, 1200, 800)
         
         self.central_widget = QWidget()
         self.setCentralWidget(self.central_widget)
-        self.layout = QVBoxLayout(self.central_widget)
+        self.layout = QGridLayout(self.central_widget)
         
         self.original_names = []
         self.setup_ui()
@@ -43,28 +43,35 @@ class BatchRenameUI(QMainWindow):
         self.progress_bar = ProgressBarWidget(self)
         self.footer = FooterWidget(self)
         
-        # Create a splitter for file list and preview
+        # Create a splitter for controls and content
         splitter = QSplitter(Qt.Orientation.Horizontal)
-        splitter.addWidget(self.file_list)
-        splitter.addWidget(self.file_list.preview_list)
-        splitter.setSizes([int(self.width() * 0.6), int(self.width() * 0.4)])
+        
+        # Left side: Controls
+        left_widget = QWidget()
+        left_layout = QVBoxLayout(left_widget)
+        left_layout.addWidget(self.folder_selection)
+        left_layout.addWidget(self.rename_options)
+        left_layout.addWidget(self.action_buttons)
+        left_layout.addWidget(self.progress_bar)
+        left_layout.addStretch(1)
+        
+        # Right side: Content
+        right_widget = QWidget()
+        right_layout = QVBoxLayout(right_widget)
+        right_layout.addWidget(self.file_list)
+        right_layout.addWidget(self.file_list.preview_list)
+        
+        splitter.addWidget(left_widget)
+        splitter.addWidget(right_widget)
+        splitter.setSizes([int(self.width() * 0.3), int(self.width() * 0.7)])  # 30% left, 70% right
 
-        # Main layout
-        self.layout.addWidget(self.folder_selection)
-        self.layout.addWidget(splitter)
-        self.layout.addWidget(self.rename_options)
-        
-        # Action buttons and progress bar in a horizontal layout
-        action_layout = QHBoxLayout()
-        action_layout.addWidget(self.action_buttons)
-        action_layout.addWidget(self.progress_bar)
-        self.layout.addLayout(action_layout)
-        
-        self.layout.addWidget(self.footer)
+        # Add components to the grid layout
+        self.layout.addWidget(splitter, 0, 0, 1, 12)  # Span all 12 columns
+        self.layout.addWidget(self.footer, 1, 0, 1, 12)  # Footer spans all 12 columns
         
         # Set layout spacing and margins
         self.layout.setSpacing(20)
-        self.layout.setContentsMargins(20, 20, 20, 20)
+        self.layout.setContentsMargins(30, 30, 30, 30)
         
         # Connect signals
         self.folder_selection.folder_selected.connect(self.update_file_list)

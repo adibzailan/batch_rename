@@ -11,14 +11,22 @@ The Batch File Renaming Tool is a user-friendly application that allows you to r
 - Real-time preview of file name changes
 - Intuitive multi-file selection using CTRL+Click and Shift+Click
 - Undo functionality to revert changes
-- Modern, neutral color scheme for improved readability
+- Modern, Swiss Design-inspired color scheme for improved readability and aesthetics
 - Error reporting for easier troubleshooting
 
-## Recent Improvements
+## Recent Improvements (v1.1.0)
 
-- Enhanced UI with a more neutral color scheme for better visual comfort
-- Implemented standard multi-select functionality (CTRL+Click, Shift+Click) for file selection
-- Improved contrast and readability with bold labels and regular text for content
+- Redesigned UI adhering to Swiss Design principles and Studio Merpati brand guidelines
+- Implemented an asymmetrical layout with controls on the left (30%) and content on the right (70%)
+- Updated color scheme:
+  - Living Coral (#FF6F61) as the primary accent color
+  - Dark Gray (#333333) for text
+  - Off-White (#F5F5F5) for backgrounds
+  - Soft Teal (#4ECDC4) for selected items and links
+- Updated typography to use Helvetica Neue and Open Sans fonts
+- Improved white space usage for better visual separation and clarity
+- Enhanced responsive design with a splitter for flexible resizing
+- Updated footer with new layout and version number (Alpha 1.1.0)
 - Streamlined the overall user experience with a cleaner, more minimalist layout
 
 ## Requirements
