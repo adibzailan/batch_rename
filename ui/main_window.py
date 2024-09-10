@@ -4,7 +4,8 @@ import logging
 import tempfile
 import shutil
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QMessageBox, QFileDialog, QSplitter, QGridLayout
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QRect
+from PyQt6.QtGui import QScreen
 from .rename_worker import RenameWorker
 from .ui_components.folder_selection import FolderSelectionWidget
 from .ui_components.file_list import FileListWidget
@@ -34,6 +35,15 @@ class BatchRenameUI(QMainWindow):
         self.original_names = []
         self.setup_ui()
         apply_theme(self)
+        self.center_on_screen()
+        
+    def center_on_screen(self):
+        screen = QApplication.primaryScreen().geometry()
+        size = self.geometry()
+        self.move(
+            (screen.width() - size.width()) // 2,
+            (screen.height() - size.height()) // 2
+        )
         
     def setup_ui(self):
         self.folder_selection = FolderSelectionWidget(self)
@@ -43,43 +53,21 @@ class BatchRenameUI(QMainWindow):
         self.progress_bar = ProgressBarWidget(self)
         self.footer = FooterWidget(self)
         
-        # Create a splitter for controls and content
-        splitter = QSplitter(Qt.Orientation.Horizontal)
-        
-        # Left side: Controls
-        left_widget = QWidget()
-        left_layout = QVBoxLayout(left_widget)
-        left_layout.addWidget(self.folder_selection)
-        left_layout.addWidget(self.rename_options)
-        left_layout.addWidget(self.action_buttons)
-        left_layout.addWidget(self.progress_bar)
-        left_layout.addStretch(1)
-        
-        # Right side: Content
-        right_widget = QWidget()
-        right_layout = QVBoxLayout(right_widget)
-        right_layout.addWidget(self.file_list)
-        right_layout.addWidget(self.file_list.preview_list)
-        
-        splitter.addWidget(left_widget)
-        splitter.addWidget(right_widget)
-        splitter.setSizes([int(self.width() * 0.3), int(self.width() * 0.7)])  # 30% left, 70% right
+        # Add components to layout
+        self.layout.addWidget(self.folder_selection, 0, 0)
+        self.layout.addWidget(self.file_list, 1, 0)
+        self.layout.addWidget(self.rename_options, 2, 0)
+        self.layout.addWidget(self.action_buttons, 3, 0)
+        self.layout.addWidget(self.progress_bar, 4, 0)
+        self.layout.addWidget(self.footer, 5, 0)
 
-        # Add components to the grid layout
-        self.layout.addWidget(splitter, 0, 0, 1, 12)  # Span all 12 columns
-        self.layout.addWidget(self.footer, 1, 0, 1, 12)  # Footer spans all 12 columns
-        
-        # Set layout spacing and margins
-        self.layout.setSpacing(20)
-        self.layout.setContentsMargins(30, 30, 30, 30)
-        
         # Connect signals
         self.folder_selection.folder_selected.connect(self.update_file_list)
         self.action_buttons.rename_button.clicked.connect(self.batch_rename_files)
         self.action_buttons.undo_button.clicked.connect(self.undo_rename)
         self.file_list.file_list.itemSelectionChanged.connect(self.update_preview)
         self.rename_options.options_changed.connect(self.update_preview)
-        
+
     def update_file_list(self, folder_path=None):
         if folder_path is None:
             folder_path = self.folder_selection.get_folder_path()
@@ -97,7 +85,7 @@ class BatchRenameUI(QMainWindow):
         else:
             logging.warning(f"Invalid folder path: {folder_path}")
             self.show_error("Please select a valid folder.")
-    
+
     def update_preview(self):
         self.file_list.clear_preview()
         selected_items = self.file_list.get_selected_items()
@@ -108,7 +96,7 @@ class BatchRenameUI(QMainWindow):
                 self.file_list.add_preview_item(f"{filename} → {new_filename}")
             else:
                 self.file_list.add_preview_item(f"{filename} (no change)")
-    
+
     def apply_rename_operation(self, filename):
         operation, param1, param2 = self.rename_options.get_rename_operation()
         if operation == "prefix_suffix":
@@ -116,7 +104,7 @@ class BatchRenameUI(QMainWindow):
             return f"{param1}{name}{param2}{ext}"
         else:
             return filename.replace(param1, param2)
-    
+
     def batch_rename_files(self):
         folder_path = self.folder_selection.get_folder_path()
         if not folder_path or not os.path.isdir(folder_path):
@@ -142,40 +130,22 @@ class BatchRenameUI(QMainWindow):
         
         self.action_buttons.enable_rename_button(False)
         self.action_buttons.enable_undo_button(False)
-    
+
     def update_progress(self, value):
         self.progress_bar.set_value(value)
-    
+
     def rename_finished(self):
         self.action_buttons.enable_rename_button(True)
         self.action_buttons.enable_undo_button(True)
         self.update_file_list()
         logging.info("Files renamed successfully")
         QMessageBox.information(self, "Success", "Files renamed successfully!")
-    
+
     def show_error(self, error_message):
         logging.error(f"Error: {error_message}")
-        reply = QMessageBox.critical(self, "Error", f"{error_message}\n\nWould you like to report this error?", 
-                                     QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
-        if reply == QMessageBox.StandardButton.Yes:
-            self.report_error()
+        QMessageBox.critical(self, "Error", error_message)
         self.action_buttons.enable_rename_button(True)
-    
-    def report_error(self):
-        try:
-            desktop_path = os.path.join(os.path.expanduser('~'), 'Desktop')
-            error_report_path = os.path.join(desktop_path, 'batch_rename_error_report.txt')
-            
-            with open(log_path, 'r') as log_file, open(error_report_path, 'w') as report_file:
-                report_file.write("Batch Rename Error Report\n\n")
-                report_file.write("Log contents:\n\n")
-                report_file.write(log_file.read())
-            
-            QMessageBox.information(self, "Error Report", f"Error report saved to:\n{error_report_path}")
-        except Exception as e:
-            logging.error(f"Failed to create error report: {str(e)}")
-            QMessageBox.warning(self, "Error", f"Failed to create error report: {str(e)}")
-    
+
     def undo_rename(self):
         folder_path = self.folder_selection.get_folder_path()
         if not folder_path or not os.path.isdir(folder_path):

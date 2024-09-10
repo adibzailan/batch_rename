@@ -1,6 +1,9 @@
 # Ignore the entire temporary folder
 temporary/
 
+# Ignore the entire resources folder
+resources/
+
 # Python
 __pycache__/
 *.py[cod]
