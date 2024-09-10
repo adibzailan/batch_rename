@@ -1,4 +1,5 @@
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QListWidget, QLabel, QPushButton
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QListWidget, QListWidgetItem, QLabel, QPushButton, QHBoxLayout
+from PyQt6.QtCore import Qt
 
 class FileListWidget(QWidget):
     def __init__(self, parent=None):
@@ -7,51 +8,53 @@ class FileListWidget(QWidget):
 
     def setup_ui(self):
         layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
 
-        file_list_layout = QHBoxLayout()
+        # File list
         self.file_list = QListWidget()
-        self.file_list.setSelectionMode(QListWidget.SelectionMode.MultiSelection)
+        self.file_list.setSelectionMode(QListWidget.SelectionMode.ExtendedSelection)
+
+        # Preview list
         self.preview_list = QListWidget()
+        self.preview_list.setSelectionMode(QListWidget.SelectionMode.NoSelection)
 
-        file_list_layout.addWidget(QLabel("Files:"))
-        file_list_layout.addWidget(self.file_list)
-        file_list_layout.addWidget(QLabel("Preview:"))
-        file_list_layout.addWidget(self.preview_list)
-
-        layout.addLayout(file_list_layout)
-
+        # Select/Deselect All buttons
         button_layout = QHBoxLayout()
-        select_all_button = QPushButton("Select All")
-        select_all_button.clicked.connect(self.select_all_files)
-        select_none_button = QPushButton("Select None")
-        select_none_button.clicked.connect(self.select_no_files)
+        self.select_all_button = QPushButton("Select All")
+        self.select_all_button.clicked.connect(self.select_all_files)
+        self.deselect_all_button = QPushButton("Deselect All")
+        self.deselect_all_button.clicked.connect(self.deselect_all_files)
+        button_layout.addWidget(self.select_all_button)
+        button_layout.addWidget(self.deselect_all_button)
 
-        button_layout.addWidget(select_all_button)
-        button_layout.addWidget(select_none_button)
+        # Labels
+        file_list_label = QLabel("Files:")
+        preview_label = QLabel("Preview:")
 
+        # Add widgets to layout
+        layout.addWidget(file_list_label)
+        layout.addWidget(self.file_list)
         layout.addLayout(button_layout)
+        layout.addWidget(preview_label)
+        layout.addWidget(self.preview_list)
 
-    def select_all_files(self):
-        for i in range(self.file_list.count()):
-            self.file_list.item(i).setSelected(True)
-        if self.parent():
-            self.parent().update_preview()
-
-    def select_no_files(self):
-        for i in range(self.file_list.count()):
-            self.file_list.item(i).setSelected(False)
-        if self.parent():
-            self.parent().update_preview()
+    def clear_and_add_files(self, files):
+        self.file_list.clear()
+        for file in files:
+            item = QListWidgetItem(file)
+            self.file_list.addItem(item)
 
     def get_selected_items(self):
         return self.file_list.selectedItems()
 
-    def clear_and_add_files(self, files):
-        self.file_list.clear()
-        self.file_list.addItems(files)
-
     def clear_preview(self):
         self.preview_list.clear()
 
-    def add_preview_item(self, item):
-        self.preview_list.addItem(item)
+    def add_preview_item(self, text):
+        self.preview_list.addItem(text)
+
+    def select_all_files(self):
+        self.file_list.selectAll()
+
+    def deselect_all_files(self):
+        self.file_list.clearSelection()

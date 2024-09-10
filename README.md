@@ -9,10 +9,17 @@ The Batch File Renaming Tool is a user-friendly application that allows you to r
   1. Add prefix and/or suffix
   2. Swap characters in file names
 - Real-time preview of file name changes
-- Select specific files for renaming or apply to all files in the folder
+- Intuitive multi-file selection using CTRL+Click and Shift+Click
 - Undo functionality to revert changes
-- Dark mode interface for comfortable usage
-- Studio Merpati branding elements
+- Modern, neutral color scheme for improved readability
+- Error reporting for easier troubleshooting
+
+## Recent Improvements
+
+- Enhanced UI with a more neutral color scheme for better visual comfort
+- Implemented standard multi-select functionality (CTRL+Click, Shift+Click) for file selection
+- Improved contrast and readability with bold labels and regular text for content
+- Streamlined the overall user experience with a cleaner, more minimalist layout
 
 ## Requirements
 
@@ -40,10 +47,10 @@ python ui_main.py
 This will launch the graphical user interface. From here, you can:
 
 1. Select the source folder by clicking the "Browse" button
-2. Choose a renaming option: "Add prefix and/or suffix" or "Swap characters"
-3. Enter the necessary information for the chosen renaming option
-4. Select the files you want to rename
-5. Preview the changes in the preview list
+2. Use CTRL+Click and Shift+Click to select multiple files in the file list
+3. Choose a renaming option: "Add prefix and/or suffix" or "Swap characters"
+4. Enter the necessary information for the chosen renaming option
+5. Preview the changes in real-time in the preview list
 6. Click "Rename Files" to execute the renaming operation
 7. Use "Undo Rename" if you need to revert the changes
 
@@ -85,7 +92,7 @@ The project is organized into two main components: the frontend (ui) and the bac
     - `progress_bar.py`: ProgressBarWidget
     - `footer.py`: FooterWidget
   - `utils/`
-    - `theme.py`: Contains theme-related functions
+    - `theme.py`: Contains theme-related functions and styles
 - `core/`: Backend (logic) components
   - `file_operations.py`: File-related operations
   - `rename_logic.py`: Core renaming logic
@@ -102,7 +109,7 @@ This separation of concerns between frontend and backend allows for better organ
 
 ## How It Works
 
-1. **User Interface**: The GUI provides an easy way to select the source folder, choose renaming options, and select files for renaming.
+1. **User Interface**: The GUI provides an easy way to select the source folder, choose renaming options, and select files for renaming using standard multi-select functionality.
 
 2. **Rename Options**: Users can choose to add prefixes/suffixes or swap characters in file names.
 
@@ -120,6 +127,15 @@ If you encounter any issues:
 2. Check for any error messages displayed by the application.
 3. Make sure that all required dependencies are installed correctly.
 4. If the application doesn't start, try running it from the command line to see any error messages that might not be visible otherwise.
+5. If an error occurs during operation, you will be given the option to create an error report. This report will be saved on your desktop and can be useful for diagnosing issues.
+6. Check the application's log file located in your system's temporary directory for more detailed information about any errors.
+
+## Known Issues and Limitations
+
+1. The application may have difficulty renaming files if there are permission issues or if the files are currently in use by another program.
+2. Renaming a large number of files simultaneously may take some time, especially on slower systems.
+3. The undo functionality only works for the most recent renaming operation. Multiple levels of undo are not supported.
+4. When packaging the application with PyInstaller, some antivirus software may flag the executable as suspicious. This is a false positive due to the way PyInstaller works.
 
 ## License
 
@@ -128,3 +144,7 @@ This project is open-source and available under the MIT License.
 ## Contributing
 
 Contributions to the Batch File Renaming Tool project are welcome! Please feel free to submit pull requests, create issues or spread the word.
+
+## Feedback and Support
+
+If you encounter any bugs, have feature requests, or need assistance, please open an issue on the project's GitHub page. When reporting issues, please include the error report if one was generated, or provide as much detail as possible about the problem and the steps to reproduce it.

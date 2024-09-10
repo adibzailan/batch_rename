@@ -1,6 +1,9 @@
 from PyQt6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QRadioButton, QLineEdit, QLabel, QButtonGroup
+from PyQt6.QtCore import pyqtSignal
 
 class RenameOptionsWidget(QWidget):
+    options_changed = pyqtSignal()
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setup_ui()
@@ -47,6 +50,10 @@ class RenameOptionsWidget(QWidget):
 
         self.prefix_suffix_radio.toggled.connect(self.update_rename_options)
         self.swap_radio.toggled.connect(self.update_rename_options)
+        self.prefix_entry.textChanged.connect(self.options_changed.emit)
+        self.suffix_entry.textChanged.connect(self.options_changed.emit)
+        self.swap_from_entry.textChanged.connect(self.options_changed.emit)
+        self.swap_to_entry.textChanged.connect(self.options_changed.emit)
 
     def update_rename_options(self):
         if self.prefix_suffix_radio.isChecked():
@@ -55,8 +62,7 @@ class RenameOptionsWidget(QWidget):
         else:
             self.prefix_suffix_widget.hide()
             self.swap_widget.show()
-        if self.parent():
-            self.parent().update_preview()
+        self.options_changed.emit()
 
     def get_rename_operation(self):
         if self.prefix_suffix_radio.isChecked():
