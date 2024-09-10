@@ -13,6 +13,14 @@ The Batch File Renaming Tool is a user-friendly application that allows you to r
 - Undo functionality to revert changes
 - Modern, Swiss Design-inspired color scheme for improved readability and aesthetics
 - Error reporting for easier troubleshooting
+- Splash screen for a polished startup experience
+
+## Latest Updates (v1.2.0)
+
+- Implemented a stylish splash screen adhering to Studio Merpati Design System
+- Improved startup experience with a loading progress bar
+- Enhanced error handling during application initialization
+- Centered the main application window on the screen for better user experience
 
 ## Recent Improvements (v1.1.0)
 
@@ -26,7 +34,7 @@ The Batch File Renaming Tool is a user-friendly application that allows you to r
 - Updated typography to use Helvetica Neue and Open Sans fonts
 - Improved white space usage for better visual separation and clarity
 - Enhanced responsive design with a splitter for flexible resizing
-- Updated footer with new layout and version number (Alpha 1.1.0)
+- Updated footer with new layout and version number (Alpha 1.2.0)
 - Streamlined the overall user experience with a cleaner, more minimalist layout
 
 ## Requirements
@@ -52,7 +60,7 @@ To run the Batch File Renaming Tool, execute the following command in the projec
 python ui_main.py
 ```
 
-This will launch the graphical user interface. From here, you can:
+This will launch the application with a splash screen, followed by the main graphical user interface. From here, you can:
 
 1. Select the source folder by clicking the "Browse" button
 2. Use CTRL+Click and Shift+Click to select multiple files in the file list
@@ -92,6 +100,7 @@ The project is organized into two main components: the frontend (ui) and the bac
 - `ui/`: Frontend (UI) components
   - `main_window.py`: Contains the main BatchRenameUI class
   - `rename_worker.py`: Contains the RenameWorker class for background processing
+  - `splash_screen.py`: Contains the SplashScreen class for the startup screen
   - `ui_components/`: Individual UI components
     - `folder_selection.py`: FolderSelectionWidget
     - `file_list.py`: FileListWidget
@@ -106,6 +115,9 @@ The project is organized into two main components: the frontend (ui) and the bac
   - `rename_logic.py`: Core renaming logic
   - `rename_functions.py`: Specific renaming functions
 - `pyinstaller_script.py`: Script for packaging the application with PyInstaller
+- `resources/`: Contains application resources
+  - `fonts/`: Custom fonts used in the application
+  - `images/`: Images used in the application, including the splash screen logo
 
 ### Frontend (UI) vs Backend (Core)
 
@@ -117,15 +129,17 @@ This separation of concerns between frontend and backend allows for better organ
 
 ## How It Works
 
-1. **User Interface**: The GUI provides an easy way to select the source folder, choose renaming options, and select files for renaming using standard multi-select functionality.
+1. **Startup**: The application displays a splash screen while initializing components.
 
-2. **Rename Options**: Users can choose to add prefixes/suffixes or swap characters in file names.
+2. **User Interface**: The GUI provides an easy way to select the source folder, choose renaming options, and select files for renaming using standard multi-select functionality.
 
-3. **Preview**: The application shows a real-time preview of the renamed files before applying changes.
+3. **Rename Options**: Users can choose to add prefixes/suffixes or swap characters in file names.
 
-4. **Renaming Process**: When the user clicks "Rename Files," the application renames the selected files according to the chosen options.
+4. **Preview**: The application shows a real-time preview of the renamed files before applying changes.
 
-5. **Undo Functionality**: The "Undo Rename" feature allows users to revert the last renaming operation.
+5. **Renaming Process**: When the user clicks "Rename Files," the application renames the selected files according to the chosen options.
+
+6. **Undo Functionality**: The "Undo Rename" feature allows users to revert the last renaming operation.
 
 ## Troubleshooting
 
