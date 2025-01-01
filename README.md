@@ -24,32 +24,6 @@ The Batch File Renaming Tool is a user-friendly application that allows you to r
 - Fixed PyQt6 dependency handling in packaged version
 - Enhanced error handling for file system operations
 
-## Previous Improvements (v1.2.0)
-
-- Implemented a stylish splash screen adhering to Studio Merpati Design System
-- Improved startup experience with a loading progress bar
-- Enhanced error handling during application initialization
-- Centered the main application window on the screen for better user experience
-- Improved error handling and logging throughout the application
-- Enhanced file listing and renaming functionality
-- Updated UI components for better user interaction
-- Integrated Cerebri Sans font for improved typography
-- Further optimized startup process and main window display
-
-## Previous Improvements (v1.1.0)
-
-- Redesigned UI adhering to Swiss Design principles and Studio Merpati brand guidelines
-- Implemented an asymmetrical layout with controls on the left (30%) and content on the right (70%)
-- Updated color scheme:
-  - Living Coral (#FF6F61) as the primary accent color
-  - Dark Gray (#333333) for text
-  - Off-White (#F5F5F5) for backgrounds
-  - Soft Teal (#4ECDC4) for selected items and links
-- Updated typography to use Cerebri Sans font
-- Improved white space usage for better visual separation and clarity
-- Enhanced responsive design with a splitter for flexible resizing
-- Updated footer with new layout and version number (Alpha 1.3.0)
-- Streamlined the overall user experience with a cleaner, more minimalist layout
 
 ## Requirements
 
@@ -85,74 +59,12 @@ This will launch the application with a splash screen, followed by the main grap
 7. Click "Rename Files" to execute the renaming operation
 8. Use "Undo Rename" if you need to revert the changes
 
-## Packaging the Application
-
-The application can now be packaged into a standalone executable using PyInstaller with an optimized spec file. This creates a single executable that includes all necessary dependencies and can run on systems without Python installed.
-
-### Method 1: Using the PyInstaller Spec File (Recommended)
-
-1. Ensure PyInstaller is installed:
-```bash
-pip install pyinstaller
-```
-2. Build using the spec file:
-```bash
-pyinstaller BatchRename.spec
-```
-This will create an optimized executable in the `dist` folder that includes:
-- All required PyQt6 dependencies
-- Custom fonts and resources
-- Optimized startup configuration
-
-### Method 2: Manual PyInstaller Command
-
-Alternatively, you can use the direct PyInstaller command:
-```bash
-pyinstaller --name BatchRename --windowed --icon=resources/images/icon.ico ui_main.py
-```
-Note: This method may require additional configuration for proper resource bundling.
-
 ### Running the Packaged Application
 
 1. Navigate to the `dist` folder
 2. Run `BatchRename.exe`
 
 The packaged application includes all necessary dependencies and will run on any compatible Windows system without requiring Python or additional installations.
-
-## File Structure
-
-The project is organized into two main components: the frontend (ui) and the backend (core).
-
-- `ui_main.py`: The main entry point of the application
-- `ui/`: Frontend (UI) components
-  - `main_window.py`: Contains the main BatchRenameUI class
-  - `rename_worker.py`: Contains the RenameWorker class for background processing
-  - `splash_screen.py`: Contains the SplashScreen class for the startup screen
-  - `ui_components/`: Individual UI components
-    - `folder_selection.py`: FolderSelectionWidget
-    - `file_list.py`: FileListWidget
-    - `rename_options.py`: RenameOptionsWidget
-    - `action_buttons.py`: ActionButtonsWidget
-    - `progress_bar.py`: ProgressBarWidget
-    - `footer.py`: FooterWidget
-  - `utils/`
-    - `theme.py`: Contains theme-related functions and styles
-- `core/`: Backend (logic) components
-  - `file_operations.py`: File-related operations
-  - `rename_logic.py`: Core renaming logic
-  - `rename_functions.py`: Specific renaming functions
-- `pyinstaller_script.py`: Script for packaging the application with PyInstaller
-- `resources/`: Contains application resources
-  - `fonts/`: Custom fonts used in the application (including Cerebri Sans)
-  - `images/`: Images used in the application, including the splash screen logo
-
-### Frontend (UI) vs Backend (Core)
-
-- **Frontend (ui)**: This directory contains all the user interface components. It handles the presentation layer, user interactions, and coordinates with the backend to perform operations. The frontend is responsible for displaying information to the user and capturing user input.
-
-- **Backend (core)**: This directory contains the core logic and functionality of the application. It handles file operations, renaming logic, and other backend processes. The backend doesn't deal with user interfaces directly but provides the necessary functions and classes that the frontend uses to perform operations.
-
-This separation of concerns between frontend and backend allows for better organization, maintainability, and potential reusability of code. The frontend can be updated or replaced without affecting the core functionality, and vice versa.
 
 ## How It Works
 
@@ -168,17 +80,6 @@ This separation of concerns between frontend and backend allows for better organ
 
 6. **Undo Functionality**: The "Undo Rename" feature allows users to revert the last renaming operation.
 
-## Troubleshooting
-
-If you encounter any issues:
-
-1. Ensure that you have the correct permissions to read from and write to the source folder.
-2. Check for any error messages displayed by the application.
-3. Make sure that all required dependencies are installed correctly.
-4. If the application doesn't start, try running it from the command line to see any error messages that might not be visible otherwise.
-5. If an error occurs during operation, you will be given the option to create an error report. This report will be saved on your desktop and can be useful for diagnosing issues.
-6. Check the application's log file located in your system's temporary directory for more detailed information about any errors.
-
 ## Known Issues and Limitations
 
 1. The application may have difficulty renaming files if there are permission issues or if the files are currently in use by another program.
@@ -193,7 +94,3 @@ This project is open-source and available under the MIT License.
 ## Contributing
 
 Contributions to the Batch File Renaming Tool project are welcome! Please feel free to submit pull requests, create issues or spread the word.
-
-## Feedback and Support
-
-If you encounter any bugs, have feature requests, or need assistance, please open an issue on the project's GitHub page. When reporting issues, please include the error report if one was generated, or provide as much detail as possible about the problem and the steps to reproduce it.
