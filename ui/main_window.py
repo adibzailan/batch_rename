@@ -3,7 +3,7 @@ import os
 import logging
 import tempfile
 import shutil
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QMessageBox, QFileDialog, QSplitter, QGridLayout
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QMessageBox, QFileDialog, QSplitter, QGridLayout, QLabel
 from PyQt6.QtCore import Qt, QRect
 from PyQt6.QtGui import QScreen
 from .rename_worker import RenameWorker
@@ -30,7 +30,6 @@ class BatchRenameUI(QMainWindow):
         
         self.central_widget = QWidget()
         self.setCentralWidget(self.central_widget)
-        self.layout = QGridLayout(self.central_widget)
         
         self.original_names = []
         self.setup_ui()
@@ -46,26 +45,57 @@ class BatchRenameUI(QMainWindow):
         )
         
     def setup_ui(self):
+        # Create main vertical layout
+        main_layout = QVBoxLayout(self.central_widget)
+        
+        # Create folder selection at top
         self.folder_selection = FolderSelectionWidget(self)
+        main_layout.addWidget(self.folder_selection)
+        
+        # Create vertical splitter for file list and preview
+        list_preview_splitter = QSplitter(Qt.Orientation.Vertical)
+        list_preview_splitter.setChildrenCollapsible(False)  # Prevent sections from being collapsed
+        list_preview_splitter.setHandleWidth(8)  # Make the splitter handle wider
+        list_preview_splitter.setStyleSheet("""
+            QSplitter::handle {
+                background: #3D3D3D;
+                border: 1px solid #2D2D2D;
+            }
+            QSplitter::handle:hover {
+                background: #4D4D4D;
+            }
+        """)
+        
+        # Add file list to splitter
         self.file_list = FileListWidget(self)
+        self.file_list.selection_changed.connect(self.update_preview)
+        list_preview_splitter.addWidget(self.file_list)
+        
+        # Create preview widget
+        self.preview_list = FileListWidget(self, is_preview=True)
+        list_preview_splitter.addWidget(self.preview_list)
+        
+        # Set initial sizes (60% file list, 40% preview)
+        list_preview_splitter.setSizes([600, 400])
+        
+        # Add splitter to main layout
+        main_layout.addWidget(list_preview_splitter)
+        
+        # Add remaining widgets
         self.rename_options = RenameOptionsWidget(self)
         self.action_buttons = ActionButtonsWidget(self)
         self.progress_bar = ProgressBarWidget(self)
         self.footer = FooterWidget(self)
         
-        # Add components to layout
-        self.layout.addWidget(self.folder_selection, 0, 0)
-        self.layout.addWidget(self.file_list, 1, 0)
-        self.layout.addWidget(self.rename_options, 2, 0)
-        self.layout.addWidget(self.action_buttons, 3, 0)
-        self.layout.addWidget(self.progress_bar, 4, 0)
-        self.layout.addWidget(self.footer, 5, 0)
+        main_layout.addWidget(self.rename_options)
+        main_layout.addWidget(self.action_buttons)
+        main_layout.addWidget(self.progress_bar)
+        main_layout.addWidget(self.footer)
 
         # Connect signals
         self.folder_selection.folder_selected.connect(self.update_file_list)
         self.action_buttons.rename_button.clicked.connect(self.batch_rename_files)
         self.action_buttons.undo_button.clicked.connect(self.undo_rename)
-        self.file_list.file_list.itemSelectionChanged.connect(self.update_preview)
         self.rename_options.options_changed.connect(self.update_preview)
 
     def update_file_list(self, folder_path=None):
@@ -87,15 +117,15 @@ class BatchRenameUI(QMainWindow):
             self.show_error("Please select a valid folder.")
 
     def update_preview(self):
-        self.file_list.clear_preview()
+        self.preview_list.clear()
         selected_items = self.file_list.get_selected_items()
         for item in selected_items:
             filename = item.text()
             new_filename = self.apply_rename_operation(filename)
             if new_filename != filename:
-                self.file_list.add_preview_item(f"{filename} → {new_filename}")
+                self.preview_list.add_item(f"{filename} → {new_filename}")
             else:
-                self.file_list.add_preview_item(f"{filename} (no change)")
+                self.preview_list.add_item(f"{filename} (no change)")
 
     def apply_rename_operation(self, filename):
         operation, param1, param2 = self.rename_options.get_rename_operation()
