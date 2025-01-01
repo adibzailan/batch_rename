@@ -1,7 +1,5 @@
-# Ignore the entire temporary folder
+# Project Folders
 temporary/
-
-# Ignore the entire resources folder
 resources/
 
 # Python
@@ -14,24 +12,27 @@ venv/
 env/
 ENV/
 
-# PyInstaller
+# Build and Distribution
 dist/
 build/
-*.spec
+# Allow spec files for PyInstaller configuration
+# *.spec
 
-# IDEs and Editors
+# Release Packages
+*.zip
+# Except versioned releases
+!BatchRename-v*.zip
+
+# IDE
 .vscode/
 .idea/
 *.swp
-*.swo
 
-# OS generated files
+# Logs and Debug
+*.log
+debug.txt
+
+# OS Generated
 .DS_Store
 Thumbs.db
-
-# Logs
-*.log
-
-# Other
-*.bak
-*.tmp
+Desktop.ini

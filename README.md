@@ -16,7 +16,15 @@ The Batch File Renaming Tool is a user-friendly application that allows you to r
 - Splash screen for a polished startup experience
 - Detailed logging for better diagnostics and troubleshooting
 
-## Latest Updates (v1.2.0)
+## Latest Updates (v1.3.0)
+
+- Added standalone executable packaging with PyInstaller
+- Optimized packaging configuration for reduced file size
+- Improved application startup performance
+- Fixed PyQt6 dependency handling in packaged version
+- Enhanced error handling for file system operations
+
+## Previous Improvements (v1.2.0)
 
 - Implemented a stylish splash screen adhering to Studio Merpati Design System
 - Improved startup experience with a loading progress bar
@@ -79,25 +87,37 @@ This will launch the application with a splash screen, followed by the main grap
 
 ## Packaging the Application
 
-To create a standalone executable that can be run on systems without Python installed, you can use PyInstaller. There are two methods to package the application:
+The application can now be packaged into a standalone executable using PyInstaller with an optimized spec file. This creates a single executable that includes all necessary dependencies and can run on systems without Python installed.
 
-### Method 1: Using the PyInstaller script
+### Method 1: Using the PyInstaller Spec File (Recommended)
 
-Run the following command:
-
+1. Ensure PyInstaller is installed:
+```bash
+pip install pyinstaller
 ```
-python pyinstaller_script.py
+2. Build using the spec file:
+```bash
+pyinstaller BatchRename.spec
 ```
+This will create an optimized executable in the `dist` folder that includes:
+- All required PyQt6 dependencies
+- Custom fonts and resources
+- Optimized startup configuration
 
-### Method 2: Running PyInstaller directly
+### Method 2: Manual PyInstaller Command
 
-Run the following command:
-
+Alternatively, you can use the direct PyInstaller command:
+```bash
+pyinstaller --name BatchRename --windowed --icon=resources/images/icon.ico ui_main.py
 ```
-pyinstaller --onefile --windowed ui_main.py
-```
+Note: This method may require additional configuration for proper resource bundling.
 
-Both methods will create an executable file in the `dist` folder. You can distribute this executable to run the application on other systems without requiring Python or the dependencies to be installed.
+### Running the Packaged Application
+
+1. Navigate to the `dist` folder
+2. Run `BatchRename.exe`
+
+The packaged application includes all necessary dependencies and will run on any compatible Windows system without requiring Python or additional installations.
 
 ## File Structure
 
